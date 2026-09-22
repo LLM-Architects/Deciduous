@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "purpose": "Portable fresh-base training recipe; metadata only, consumed through configs/train.sh rather than loaded as a trainer config",
+  "initialization": "pinned_pretrained_base_fresh_optimizer",
+  "training_mode": "full_retained_weights",
+  "objective": "cross_entropy",
+  "parameters": {
+    "base_model": "Qwen/Qwen3.8-27B",
+    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "epochs": 1,
+    "seed": 20260920,
+    "lr": 2e-06,
+    "weight_decay": 0.01,
+    "batch_size": 32,
+    "effective_batch_size": 256,
+    "token_budget": 8192,
+    "max_length": 8192,
+    "cpu_threads": 32,
+    "eval_every": 50,
+    "public_eval_every": 50,
+    "resume_every": 50
+  },
+  "explicit_inputs": [
+    "train",
+    "temperature",
+    "development",
+    "reference",
+    "public_probability_diagnostic"
+  ],
+  "requires_fresh_run_and_output": true,
+  "historical_curated_run": {
+    "training_rows": 73000,
+    "completed_updates": 286,
+    "selected_update": 200,
+    "selected_examples_seen": 51200,
+    "selected_fraction_of_epoch": 0.7013698630136986,
+    "selected_temperature": 2.207568021892729,
+    "temperature_rows": 3500,
+    "final_monitored_panel_rows": 4700,
+    "separate_probability_rows": 10,
+    "historical_data_sha256": {
+      "development": "b974a05aebeb7a4b41af88f1b0517d7893dd71bc72b9b3a75090b0f39dc33927",
+      "temperature": "5692203ea1dfbf84d0fb447a1c27d3248f99937e4e488540f91c230911582a19",
+      "reference": "d2d091ac610d2ac226fa1d206851d35ca441f3c4bbd01050df6ed45e3f5bf7fe",
+      "train": "a6b1d3a180a3d2a03e8edc8a1d94a2e4576040be75f98e733bde52092548ce6d",
+      "public": "513b39d2df10879dbfbdd0b2c9f6d187e91257a572d97cebce5bb9a4afe6ea4f"
+    },
+    "trained_code_sha256": {
+      "train.py": "6c9dc52e468fb5fb40036fd7bcd212b41f2cc027e0f379e0d14ee3b6cd4b6791",
+      "model.py": "a8da7607c9c770ac185e42671a7d7246af2d539966f6fe0a55ac56a02b453c64",
+      "optim.py": "ae0ec56aafe7d01cd46f7d9e088909610fa48314ed215b550b5c67c38d6f365d",
+      "evaluate.py": "dfad2bc7fd4640c13d57e6f70c589a4eeec8b47f7441b988c5f513ecb924d72f",
+      "types.py": "0f8e3bfa4e92693ec50b9f258fb9180438a62d30caf9b3e6c00860a71e46dc5a",
+      "events.py": "98c77d359fea9a6eeb62753004f93ded41479aefb5812a4812ed149cfff26f7f",
+      "uv.lock": "cba79e0f2caa23d14740ce0008076aadd5dd739f59a5fdf9eaaf1943fe207fc0"
+    },
+    "chronology": "Fresh pretrained initialization; a durable update-50 pause and exact optimizer resume accompanied evaluation-panel amendments. One continuous training trajectory, not two SFT stages."
+  },
+  "reproduction_limits": [
+    "The exact curated 73000-row corpus and its images are not bundled.",
+    "autojev-data builds the earlier 96,000-row corpus, not the curated subset.",
+    "The fresh script uses the final monitored panel from update zero; historical evaluation-panel chronology differs.",
+    "API regeneration or different data cannot guarantee the recorded metrics."
+  ]
+}

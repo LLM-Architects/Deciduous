@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "description": "Sanitized publication summary and regenerated figures with consistent model names. Accuracy and calibration use recorded base-0, selected-200 and Jev metrics; the training figure shows all 286 actual losses and their 10-update trailing mean. All seven recorded evaluation checkpoints remain in the results data. Historical research figures are unchanged. No new inference, fitting, or benchmark text. Research-source names are provenance identifiers, not bundled file promises.",
+  "research_sources": {
+    "progress/curated/panel-v3/reports/step-00286.json": "d1819a7e006dd0bae03f5f96e7e4c1ea8f08e78f5eab06e4e95fffa456d86f5c",
+    "progress/curated/panel-v3/reports/step-00200.json": "9b4952154a1148858403afdf81e6b25023782777d2332b2034299cbee09705e8",
+    "progress/curated/panel-v3/all-checkpoints.csv": "ad6b6dda1b7bd9c20c5f1cfd10a887e474fe43ee480e6f6ecc269aa7b4ee0dff",
+    "progress/curated/panel-v3/all-checkpoints.provenance.json": "fae25381d7b3492cb68e3c5a750c4f4db1114cb97e27e2baae33bf47c9b84a5b",
+    "progress/curated/heldout-evaluation-freeze-v3.json": "7b8b0f75f0de153786d6fc150604dbde55a885c51bb7e6c4ebc92141545e7e2d",
+    "progress/curated/panel-v3/resume-amendment.json": "1c8700d310bb1322cae88bc61b3f165d08564ed852946bd41439ce8d749a7193",
+    "progress/curated/panel-v3/timestamp-correction.json": "3710cb2504c8bdef2108b04c9a58827f0f05105b69a05d765c53ecb2d2a58e4a",
+    "progress/curated/panel-v3/figures/step-00200/figures.json": "21e45118b34b634f8d4261c857db020ecf5afb8e3267ea4ac04bee6e703914c2",
+    "progress/curated/panel-v3/figures/step-00286/figures.json": "56031cf94a87da2fbdc9d10d431fbd06816ea55d6a4a9a43d8528df00c6a9279",
+    "progress/curated/panel-v3/figures/step-00286/training-events.jsonl": "d781b4e43c1bda4f6ebf4e46b42bbe26bdd9feb040a1ad4b11ace1a5fa88dd25",
+    "progress/curated/runs/sft-curated-02/summary.json": "aa1941e535c3501d5546c140768a2d0a18c8464977431b20f128180363cf08de",
+    "progress/curated/plot-panel-v3.py": "c0fcdda806f4f9786556e921c587c09184dd76de95813e481129f36b506fba99",
+    "progress/curated/watch-panel-v3.py": "50aed7f03b00406f143dfd15cb0a37ef7f6c2d5731e07fbd83d16f9fde7bc5db",
+    "progress/public-release-20260922/plot-selected-accuracy.py": "3e7f4e515163f7e04b7ae36d9fc181eb39bc330434ac24d3e13c1fe097a50632"
+  },
+  "evaluation_inputs_sha256": {
+    "data/curation/holdout-v3/main.jsonl": "b974a05aebeb7a4b41af88f1b0517d7893dd71bc72b9b3a75090b0f39dc33927",
+    "data/curation/holdout-v3/probability-diagnostic.jsonl": "513b39d2df10879dbfbdd0b2c9f6d187e91257a572d97cebce5bb9a4afe6ea4f",
+    "progress/curated/panel-v3/jev.predictions.jsonl": "d2d091ac610d2ac226fa1d206851d35ca441f3c4bbd01050df6ed45e3f5bf7fe",
+    "progress/curated/panel-v3/probability-jev.predictions.jsonl": "8340434cd3c46d5893d568d69ebf94e7b22bcc0aed0dfb0af3b752843305638b"
+  },
+  "calibration_sha256": "5692203ea1dfbf84d0fb447a1c27d3248f99937e4e488540f91c230911582a19",
+  "training_sha256": "a6b1d3a180a3d2a03e8edc8a1d94a2e4576040be75f98e733bde52092548ce6d",
+  "figure_sources": {
+    "selected-accuracy.png": {
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "3e7f4e515163f7e04b7ae36d9fc181eb39bc330434ac24d3e13c1fe097a50632",
+      "sha256": "4bd341be036ec1162d1f2b0fc862b4a670dae133ce28205e8a3c80098eb3b159",
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2",
+      "source": "assets/results.json",
+      "source_sha256": "1853ec035aabd334f9d765e43444c82710a642aee528aacb7123be5dd01be6e3",
+      "checkpoint": 200,
+      "selected_checkpoint": 200,
+      "base_checkpoint": 0,
+      "legend": [
+        "Qwen3.8-27B",
+        "AutoJev-27B",
+        "Jev"
+      ],
+      "evaluation_steps": [
+        0,
+        200
+      ],
+      "orientation": "vertical"
+    },
+    "selected-accuracy.svg": {
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "3e7f4e515163f7e04b7ae36d9fc181eb39bc330434ac24d3e13c1fe097a50632",
+      "sha256": "bc27256d17906cda7f11cfeaecc4fa999852ffb1ffb981909c4ea8a2b02320ea",
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2",
+      "source": "assets/results.json",
+      "source_sha256": "1853ec035aabd334f9d765e43444c82710a642aee528aacb7123be5dd01be6e3",
+      "checkpoint": 200,
+      "selected_checkpoint": 200,
+      "base_checkpoint": 0,
+      "legend": [
+        "Qwen3.8-27B",
+        "AutoJev-27B",
+        "Jev"
+      ],
+      "evaluation_steps": [
+        0,
+        200
+      ],
+      "orientation": "vertical"
+    },
+    "selected-calibration.png": {
+      "source": "assets/results.json",
+      "source_sha256": "1853ec035aabd334f9d765e43444c82710a642aee528aacb7123be5dd01be6e3",
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "233e2136cf6f171ab965c7e50ca1cdb8b037c983e96bd0e72b164bee8893050d",
+      "sha256": "e290dd77dc05e5a0afd1f70bc87ed24aba2196410c06b30478a19b18221dad0b",
+      "checkpoint": 200,
+      "selected_checkpoint": 200,
+      "base_checkpoint": 0,
+      "legend": [
+        "Qwen3.8-27B",
+        "AutoJev-27B",
+        "Jev"
+      ],
+      "evaluation_steps": [
+        0,
+        200
+      ],
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2"
+    },
+    "selected-calibration.svg": {
+      "source": "assets/results.json",
+      "source_sha256": "1853ec035aabd334f9d765e43444c82710a642aee528aacb7123be5dd01be6e3",
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "233e2136cf6f171ab965c7e50ca1cdb8b037c983e96bd0e72b164bee8893050d",
+      "sha256": "4e2883652555cdff427996078d53ab16cba9fcfe284ab6d8321d044b0feff25d",
+      "checkpoint": 200,
+      "selected_checkpoint": 200,
+      "base_checkpoint": 0,
+      "legend": [
+        "Qwen3.8-27B",
+        "AutoJev-27B",
+        "Jev"
+      ],
+      "evaluation_steps": [
+        0,
+        200
+      ],
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2"
+    },
+    "training-progress.png": {
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "7cc0d333a577288da8f68497b92280148258a0dbb167808796358f2d0323df09",
+      "sha256": "054b9a396c717af152ca26d502f0e1ff87a51be9348a523eadad27ec955c0f59",
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2",
+      "source": "assets/training-loss.csv",
+      "source_sha256": "a1bb3ef509b3bf4b6c465d896d3289698526943fb739d35ca8a9e9fc6986d42b",
+      "legend": [
+        "Recorded loss",
+        "10-update mean"
+      ],
+      "rows": 286,
+      "training_updates": {
+        "first": 1,
+        "last": 286
+      },
+      "loss_trailing_mean": 10,
+      "evaluation_metrics_included": false
+    },
+    "training-progress.svg": {
+      "renderer": "progress/public-release-20260922/plot-selected-accuracy.py",
+      "renderer_sha256": "7cc0d333a577288da8f68497b92280148258a0dbb167808796358f2d0323df09",
+      "sha256": "a0729e035bf7e6cd7135479ccbc018cbd368fcc2863fbc9527b31b42bb1fd81a",
+      "generation": "Regenerated publication view; recorded values unchanged.",
+      "style_reference": "progress/curated/plot-panel-v3.py",
+      "matplotlib_version": "3.11.2",
+      "source": "assets/training-loss.csv",
+      "source_sha256": "a1bb3ef509b3bf4b6c465d896d3289698526943fb739d35ca8a9e9fc6986d42b",
+      "legend": [
+        "Recorded loss",
+        "10-update mean"
+      ],
+      "rows": 286,
+      "training_updates": {
+        "first": 1,
+        "last": 286
+      },
+      "loss_trailing_mean": 10,
+      "evaluation_metrics_included": false
+    }
+  },
+  "published_assets_sha256": {
+    "all-checkpoints.csv": "ad6b6dda1b7bd9c20c5f1cfd10a887e474fe43ee480e6f6ecc269aa7b4ee0dff",
+    "results.json": "1853ec035aabd334f9d765e43444c82710a642aee528aacb7123be5dd01be6e3",
+    "selected-accuracy.png": "4bd341be036ec1162d1f2b0fc862b4a670dae133ce28205e8a3c80098eb3b159",
+    "selected-accuracy.svg": "bc27256d17906cda7f11cfeaecc4fa999852ffb1ffb981909c4ea8a2b02320ea",
+    "selected-calibration.png": "e290dd77dc05e5a0afd1f70bc87ed24aba2196410c06b30478a19b18221dad0b",
+    "selected-calibration.svg": "4e2883652555cdff427996078d53ab16cba9fcfe284ab6d8321d044b0feff25d",
+    "training-loss.csv": "a1bb3ef509b3bf4b6c465d896d3289698526943fb739d35ca8a9e9fc6986d42b",
+    "training-progress.png": "054b9a396c717af152ca26d502f0e1ff87a51be9348a523eadad27ec955c0f59",
+    "training-progress.svg": "a0729e035bf7e6cd7135479ccbc018cbd368fcc2863fbc9527b31b42bb1fd81a"
+  },
+  "private_usage_included": false,
+  "raw_benchmark_text_included": false,
+  "model_calls": 0,
+  "validation": {
+    "aggregate_values_match_original_report_exactly": true,
+    "all_seven_checkpoints_present": true,
+    "loss_updates_sequential_1_to_286": true,
+    "relative_document_links_resolve": true,
+    "local_machine_paths_or_credentials_found": false,
+    "legacy_mae_ce2_narrative_present": false,
+    "visual_inspection": "Vertical grouped accuracy chart inspected: three models, seven benchmark/overall groups, unchanged percentages, no title/subtitle/footer or example counts. Training loss and calibration figures unchanged.",
+    "scope": "CPU/documentation only; no new inference, fitting, upload, or training.",
+    "historical_figure_provenance_retained": true,
+    "regenerated_figure_hashes_verified": true,
+    "research_metrics_and_historical_figures_unchanged": true,
+    "loss_only_change_other_assets_unchanged": true
+  },
+  "superseded_figure_sources": {
+    "selected-accuracy.png": {
+      "source": "progress/curated/panel-v3/figures/step-00200/accuracy.png",
+      "sha256": "16a4ebd6bcf8536526c4f8a3e70568bbf09ca2360ef589ca73834cd780f2872c",
+      "source_figure_manifest_sha256": "21e45118b34b634f8d4261c857db020ecf5afb8e3267ea4ac04bee6e703914c2",
+      "checkpoint": 200
+    },
+    "selected-accuracy.svg": {
+      "source": "progress/curated/panel-v3/figures/step-00200/accuracy.svg",
+      "sha256": "89467ba24784116123c393cbefeb650e35b6eddba743e044a7d16073aa39cfc8",
+      "source_figure_manifest_sha256": "21e45118b34b634f8d4261c857db020ecf5afb8e3267ea4ac04bee6e703914c2",
+      "checkpoint": 200
+    },
+    "selected-calibration.png": {
+      "source": "progress/curated/panel-v3/figures/step-00200/calibration.png",
+      "sha256": "aeb7787ff4308cb2238e04e27a6e7ad20e29e10c931c51f3e67efe06b2f229ca",
+      "source_figure_manifest_sha256": "21e45118b34b634f8d4261c857db020ecf5afb8e3267ea4ac04bee6e703914c2",
+      "checkpoint": 200
+    },
+    "selected-calibration.svg": {
+      "source": "progress/curated/panel-v3/figures/step-00200/calibration.svg",
+      "sha256": "6466ce18cf753cd9c28cbc028e6063cf06d84f5a691dc55f3e51e93ca0e91f7a",
+      "source_figure_manifest_sha256": "21e45118b34b634f8d4261c857db020ecf5afb8e3267ea4ac04bee6e703914c2",
+      "checkpoint": 200
+    },
+    "training-progress.png": {
+      "source": "progress/curated/panel-v3/figures/step-00286/training-progress.png",
+      "sha256": "02de355374756b92a77ea1c796a17fbd65348774003dfc3b27744517367036c5",
+      "source_figure_manifest_sha256": "56031cf94a87da2fbdc9d10d431fbd06816ea55d6a4a9a43d8528df00c6a9279",
+      "checkpoint": 286
+    },
+    "training-progress.svg": {
+      "source": "progress/curated/panel-v3/figures/step-00286/training-progress.svg",
+      "sha256": "991e85421e6895898cfb429753e6650310d4a21132126296b27f6f5a6aa47ffd",
+      "source_figure_manifest_sha256": "56031cf94a87da2fbdc9d10d431fbd06816ea55d6a4a9a43d8528df00c6a9279",
+      "checkpoint": 286
+    }
+  }
+}
