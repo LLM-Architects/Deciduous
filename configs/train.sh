@@ -46,8 +46,8 @@ exec env -u PYTHONPATH -u VIRTUAL_ENV uv run --locked autojev-train \
   --reference "$jev_reference" \
   --public "$probability_file" \
   --run "$run_dir" --output "$checkpoint_dir" \
-  --base-model Qwen/Qwen3.8-27B \
-  --revision 1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0 \
+  --base-model prism-ml/Ternary-Bonsai-2-27B-gguf \
+  --revision 8b7157531df3859ce2a415c60754e9152554e25d \
   --epochs 1 --seed 20260920 --lr 2e-6 --weight-decay 0.01 \
   --batch-size 32 --effective-batch-size 256 \
   --token-budget 8192 --max-length 8192 --cpu-threads 32 \

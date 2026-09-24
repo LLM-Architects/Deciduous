@@ -22,7 +22,7 @@ from autojev.evaluate import (
     selection_key, validate_coverage, write_json,
 )
 from autojev.events import record
-from autojev.model import DecisionModel
+from autojev.model import BASE_MODEL, DecisionModel
 from autojev.optim import CPUOffloadAdamW
 from autojev.sft_pipeline import Receipt, ids_sha256, load_schedule, path_at
 from autojev.types import Example, JSONValue
@@ -387,8 +387,8 @@ def main() -> None:
     parser.add_argument("--quick-eval-every", type=int, default=20)
     parser.add_argument("--run", required=True)
     parser.add_argument("--output", required=True)
-    parser.add_argument("--base-model", default="Qwen/Qwen3.8-27B")
-    parser.add_argument("--revision", default="1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0")
+    parser.add_argument("--base-model", default=BASE_MODEL)
+    parser.add_argument("--revision", default="8b7157531df3859ce2a415c60754e9152554e25d")
     parser.add_argument("--cache-dir")
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -406,6 +406,13 @@ def main() -> None:
     parser.add_argument("--initial-checkpoint", help="Start a new full-weight SFT stage from this artifact with a fresh optimizer")
     parser.add_argument("--cpu-threads", type=int, default=32)
     args = parser.parse_args(namespace=Arguments())
+    if args.base_model == BASE_MODEL:
+        raise SystemExit(
+            f"The pinned base {BASE_MODEL} is a ternary GGUF release: its rotated weights execute only "
+            "under the PrismML llama.cpp runtime, so full-weight SFT cannot start from it and no torch-native "
+            "Bonsai 2 weights are published. Serve decisions from the GGUF with AUTOJEV_LLAMA_URL "
+            "(autojev-serve), or pass --base-model/--revision pointing at a torch-native repository."
+        )
     if min(args.epochs, args.batch_size, args.effective_batch_size, args.token_budget, args.eval_every, args.public_eval_every, args.resume_every, args.quick_eval_every) < 1:
         raise ValueError("Batch, epoch and interval settings must be positive")
     if args.stop_after is not None and args.stop_after < 1:

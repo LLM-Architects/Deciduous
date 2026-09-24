@@ -427,6 +427,16 @@ def token_lengths(rows: list[Example], cache: Path) -> None:
     from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
     from autojev.model import BASE_MODEL, BASE_REVISION, decision_messages, open_image
 
+    if BASE_MODEL.endswith("-gguf"):
+        from autojev.bonsai import BonsaiModel
+
+        runtime = BonsaiModel()
+        if runtime.codes[:26] != list(string.ascii_uppercase):
+            raise ValueError("The benchmark requires the model's first 26 answer codes")
+        for row in rows:
+            row["source"]["input_tokens"] = runtime.count_prompt_tokens(row)
+        return
+
     processor = cast(Qwen3VLProcessor, AutoProcessor.from_pretrained(
         BASE_MODEL, revision=BASE_REVISION, cache_dir=str(cache / "hub")))
     processor.image_processor.size = {"shortest_edge": 65536, "longest_edge": 262144}

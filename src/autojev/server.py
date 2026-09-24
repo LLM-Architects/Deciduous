@@ -29,16 +29,18 @@ from starlette.middleware.base import RequestResponseEndpoint
 from autojev.types import Answer, DecisionInput, DecisionResponse, JSONValue, Question as DecisionQuestion
 
 if TYPE_CHECKING:
+    from autojev.bonsai import BonsaiModel, RuntimeBatch
     from autojev.model import DecisionModel
 
 type Content = str | dict[str, JsonValue] | list[JsonValue]
-DEFAULT_MODEL = "autojev-qwen3.8-27b"
-ALIASES = {"autojev", "jev-latest", "jev-preview", "jev-1.13.0", DEFAULT_MODEL}
+type DecisionRuntime = DecisionModel | BonsaiModel
+DEFAULT_MODEL = "autojev-ternary-bonsai-2-27b-gguf"
+ALIASES = {"autojev", "jev-latest", "jev-preview", "jev-1.13.0", "autojev-qwen3.8-27b", DEFAULT_MODEL}
 
 
 @dataclass
 class Service:
-    model: DecisionModel | None = None
+    model: DecisionRuntime | None = None
     name: str = DEFAULT_MODEL
     checkpoint: str = "checkpoints/selected"
     release_date: str = ""
@@ -118,11 +120,20 @@ def authenticate(authorization: str | None = Header(default=None)) -> None:
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from autojev.model import DecisionModel
 
-    service.checkpoint = os.getenv("AUTOJEV_CHECKPOINT", "checkpoints/selected")
-    service.model = await run_in_threadpool(DecisionModel, checkpoint=service.checkpoint)
+    llama_url = os.getenv("AUTOJEV_LLAMA_URL")
+    if llama_url:
+        from autojev.bonsai import BonsaiModel
+        from autojev.model import BASE_GGUF
+
+        service.checkpoint = BASE_GGUF
+        service.model = await run_in_threadpool(BonsaiModel, llama_url)
+        service.release_date = "2026-09-24"
+    else:
+        service.checkpoint = os.getenv("AUTOJEV_CHECKPOINT", "checkpoints/selected")
+        service.model = await run_in_threadpool(DecisionModel, checkpoint=service.checkpoint)
+        modified = (Path(service.checkpoint) / "decision_config.json").stat().st_mtime
+        service.release_date = datetime.fromtimestamp(modified, timezone.utc).date().isoformat()
     service.name = f"autojev-{service.model.base_model.rsplit('/', 1)[-1].lower()}"
-    modified = (Path(service.checkpoint) / "decision_config.json").stat().st_mtime
-    service.release_date = datetime.fromtimestamp(modified, timezone.utc).date().isoformat()
     try:
         yield
     finally:
@@ -170,9 +181,9 @@ def models() -> dict[str, JSONValue]:
     ]}
 
 
-def predict(model: DecisionModel, body: EvaluationRequest) -> DecisionResponse:
+def predict(model: DecisionRuntime, body: EvaluationRequest) -> DecisionResponse:
     import torch
-    from autojev.model import answer
+    from autojev.model import DecisionModel, answer
 
     questions = {key: cast(DecisionQuestion, question.model_dump(exclude_none=True))
                  for key, question in body.questions.items()}
@@ -184,7 +195,9 @@ def predict(model: DecisionModel, body: EvaluationRequest) -> DecisionResponse:
     with torch.inference_mode():
         for start in range(0, len(rows), 8):
             batch = model.prepare(rows[start:start + 8])
-            distributions: list[list[float]] = (model(batch) / model.temperature).softmax(-1).cpu().tolist()
+            logits = (model(batch) if isinstance(model, DecisionModel)
+                      else model(cast("RuntimeBatch", batch)))
+            distributions: list[list[float]] = (logits / model.temperature).softmax(-1).cpu().tolist()
             for identifier, values, count in zip(identifiers[start:start + 8], distributions, batch.counts, strict=True):
                 answers[identifier] = answer(questions[identifier], values[:count])
             input_tokens += batch.input_tokens

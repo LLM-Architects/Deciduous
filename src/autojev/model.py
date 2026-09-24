@@ -21,8 +21,10 @@ from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
 from autojev.types import Answer, Content, DecisionInput, ImageInput, JSONValue, Question
 
-BASE_MODEL = "Qwen/Qwen3.8-27B"
-BASE_REVISION = "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+BASE_MODEL = "prism-ml/Ternary-Bonsai-2-27B-gguf"
+BASE_REVISION = "8b7157531df3859ce2a415c60754e9152554e25d"
+BASE_GGUF = "Ternary-Bonsai-2-27B-PQ2_0.gguf"
+BASE_MMPROJ = "Ternary-Bonsai-2-27B-mmproj-Q8_0.gguf"
 MAX_OPTIONS = 255
 
 
@@ -126,6 +128,13 @@ class DecisionModel(torch.nn.Module):
             saved = cast(CheckpointConfig, json.loads((Path(checkpoint) / "decision_config.json").read_text()))
             if saved["format_version"] != 1:
                 raise ValueError("Unsupported decision checkpoint format.")
+        if checkpoint is None and base_model == BASE_MODEL:
+            raise ValueError(
+                f"The pinned base {BASE_MODEL} stores rotated ternary GGUF weights that only the PrismML "
+                "llama.cpp runtime can execute; it has no torch tensors to load or train. Serve decisions "
+                "from it with autojev.bonsai.BonsaiModel (AUTOJEV_LLAMA_URL), or pass an explicit "
+                "torch-native base_model/revision pair."
+            )
         self.base_model = saved["base_model"] if saved else base_model
         self.revision = saved["revision"] if saved else revision
         if len(self.revision) != 40 or any(character not in string.hexdigits for character in self.revision):

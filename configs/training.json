@@ -5,8 +5,8 @@
   "training_mode": "full_retained_weights",
   "objective": "cross_entropy",
   "parameters": {
-    "base_model": "Qwen/Qwen3.8-27B",
-    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "base_model": "prism-ml/Ternary-Bonsai-2-27B-gguf",
+    "revision": "8b7157531df3859ce2a415c60754e9152554e25d",
     "epochs": 1,
     "seed": 20260920,
     "lr": 2e-06,
@@ -60,6 +60,7 @@
     "The exact curated 73000-row corpus and its images are not bundled.",
     "autojev-data builds the earlier 96,000-row corpus, not the curated subset.",
     "The fresh script uses the final monitored panel from update zero; historical evaluation-panel chronology differs.",
-    "API regeneration or different data cannot guarantee the recorded metrics."
+    "API regeneration or different data cannot guarantee the recorded metrics.",
+    "The pinned base is a ternary GGUF that only the PrismML llama.cpp runtime can execute; full-weight SFT cannot start from it and no torch-native Bonsai 2 weights are published. Fresh training requires an explicit torch-native --base-model."
   ]
 }
