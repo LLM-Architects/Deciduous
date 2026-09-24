@@ -31,6 +31,13 @@ deciduous-evaluate = "deciduous.evaluate:main"
 deciduous-serve = "deciduous.server:main"
 deciduous-report = "deciduous.report:main"
 
+[project.optional-dependencies]
+mlx = [
+    "mlx==0.32.0",
+    "tokenizers>=0.21",
+    "jinja2>=3.1",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -50,4 +57,7 @@ untyped_calls_exclude = ["transformers", "datasets", "torch._tensor.Tensor.backw
 
 [[tool.mypy.overrides]]
 module = ["datasets.*"]
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = ["mlx.*", "tokenizers.*", "jinja2.*", "artifact"]
 ignore_missing_imports = true

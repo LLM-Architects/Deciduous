@@ -22,7 +22,15 @@ from typing import cast
 import httpx
 import torch
 
-from deciduous.model import BASE_MODEL, BASE_REVISION, MAX_OPTIONS, decision_messages, open_image, options
+from deciduous.model import (
+    BASE_GGUF,
+    BASE_MODEL,
+    BASE_REVISION,
+    MAX_OPTIONS,
+    decision_messages,
+    open_image,
+    options,
+)
 from deciduous.types import DecisionInput, ImageInput
 
 SERVER_ENV = "DECIDUOUS_LLAMA_URL"
@@ -55,9 +63,21 @@ class BonsaiModel:
         self.base_model = BASE_MODEL
         self.revision = BASE_REVISION
         self._probe()
+        self.model_name = self._model_name() or BASE_GGUF
         self.codes, self.token_ids = self._derive_codes()
         self._id_to_index = {token_id: index for index, token_id in enumerate(self.token_ids)}
         self.temperature = 1.0
+
+    def _model_name(self) -> str | None:
+        try:
+            response = self.client.get("/v1/models")
+            if response.status_code != 200:
+                return None
+            entries = cast(list[dict[str, object]], response.json()["data"])
+            identifier = cast(str, entries[0]["id"])
+            return identifier.rsplit("/", 1)[-1]
+        except Exception:  # noqa: BLE001 - the checkpoint label is cosmetic; any failure falls back
+            return None
 
     def _probe(self) -> None:
         try:

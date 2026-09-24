@@ -30,10 +30,11 @@ from deciduous.types import Answer, DecisionInput, DecisionResponse, JSONValue, 
 
 if TYPE_CHECKING:
     from deciduous.bonsai import BonsaiModel, RuntimeBatch
+    from deciduous.mlx import MlxModel
     from deciduous.model import DecisionModel
 
 type Content = str | dict[str, JsonValue] | list[JsonValue]
-type DecisionRuntime = DecisionModel | BonsaiModel
+type DecisionRuntime = DecisionModel | BonsaiModel | MlxModel
 DEFAULT_MODEL = "deciduous-ternary-bonsai-2-27b-gguf"
 ALIASES = {"deciduous", "jev-latest", "jev-preview", "jev-1.13.0", "deciduous-qwen3.8-27b", DEFAULT_MODEL}
 
@@ -121,12 +122,20 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from deciduous.model import DecisionModel
 
     llama_url = os.getenv("DECIDUOUS_LLAMA_URL")
-    if llama_url:
+    mlx_pack = os.getenv("DECIDUOUS_MLX_PACK")
+    if mlx_pack:
+        from deciduous.mlx import MlxModel
+
+        service.checkpoint = Path(mlx_pack).name
+        service.model = await run_in_threadpool(MlxModel, mlx_pack)
+        service.release_date = "2026-09-24"
+        service.name = f"deciduous-{service.model.base_model.rsplit('/', 1)[-1].lower()}"
+    elif llama_url:
         from deciduous.bonsai import BonsaiModel
         from deciduous.model import BASE_GGUF
 
-        service.checkpoint = BASE_GGUF
         service.model = await run_in_threadpool(BonsaiModel, llama_url)
+        service.checkpoint = cast(str, getattr(service.model, "model_name", BASE_GGUF))
         service.release_date = "2026-09-24"
     else:
         service.checkpoint = os.getenv("DECIDUOUS_CHECKPOINT", "checkpoints/selected")

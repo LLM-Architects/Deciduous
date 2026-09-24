@@ -25,6 +25,8 @@ BASE_MODEL = "prism-ml/Ternary-Bonsai-2-27B-gguf"
 BASE_REVISION = "8b7157531df3859ce2a415c60754e9152554e25d"
 BASE_GGUF = "Ternary-Bonsai-2-27B-PQ2_0.gguf"
 BASE_MMPROJ = "Ternary-Bonsai-2-27B-mmproj-Q8_0.gguf"
+MLX_MODEL = "prism-ml/Ternary-Bonsai-2-27B-mlx-2bit"
+MLX_REVISION = "fcba37d2117a7077eac6b613b2668d14d9779edd"
 MAX_OPTIONS = 255
 
 

@@ -45,6 +45,30 @@ DECIDUOUS_LLAMA_URL=http://127.0.0.1:8080 uv run deciduous-serve
 
 Each decision renders the standard prompt with thinking disabled and reads the answer-position distribution over the 255 single-token answer codes, so probabilities arrive in one forward pass per question. Images go through the mmproj pack.
 
+#### 1-bit band (PTQ1_0)
+
+The same pinned revision also ships `Ternary-Bonsai-2-27B-PTQ1_0.gguf` (1.75 bits/weight, 5.27 GB): the identical ternary weights packed densely instead of one trit per 2-bit slot. Swap the `-m` file to serve it:
+
+```bash
+uv run hf download prism-ml/Ternary-Bonsai-2-27B-gguf Ternary-Bonsai-2-27B-PTQ1_0.gguf --local-dir models/bonsai2
+llama-server -m models/bonsai2/Ternary-Bonsai-2-27B-PTQ1_0.gguf --jinja -ngl 99 -fa on -c 8192 --parallel 1 \
+  --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.05 --host 127.0.0.1 --port 8080
+```
+
+Decisions are identical to PQ2_0 to four decimals (verified: the same distributions on text and noul probes), at 27% less disk. Run one band at a time on a single machine.
+
+### MLX runtime (Apple Silicon, text)
+
+The publisher's [MLX companion](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-mlx-2bit) carries the same base as an affine 2-bit pack with its own bundled loader; stock MLX loaders skip the required transforms. Deciduous drives it in process:
+
+```bash
+uv sync --frozen --python 3.12 --extra mlx
+uv run hf download prism-ml/Ternary-Bonsai-2-27B-mlx-2bit --revision fcba37d2117a7077eac6b613b2668d14d9779edd --local-dir models/bonsai2-mlx
+DECIDUOUS_MLX_PACK=models/bonsai2-mlx uv run deciduous-serve
+```
+
+`MlxModel` (`deciduous.mlx`) loads the pack through its bundled runtime and reads the answer-position distribution straight from the logits, one forward pass per question. Text decisions only; route images through the GGUF band. The pack is pinned at revision `fcba37d2` (`MLX_REVISION`).
+
 ### Trained checkpoint
 
 A GPU with space for approximately 49 GiB of BF16 weights plus runtime overhead.
@@ -58,6 +82,20 @@ DECIDUOUS_CHECKPOINT=checkpoints/selected uv run deciduous-serve
 Open **http://localhost:8000** for the playground or `/docs` for the API. `POST /v1/systemone` supports `choice`, `noul`, `score`, and optional base64 `images`. Set `DECIDUOUS_API_KEY` to enable authentication. While the weights are private, authenticate with `uv run hf auth login` before downloading.
 
 Use the included `DecisionModel` loader (trained checkpoints) or `BonsaiModel` (GGUF base) or the server. Published benchmarks measure text decisions; image support is not a natural-image accuracy claim.
+
+## Decision Index evaluation
+
+[Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) scores typed decision engines over a frozen 40-benchmark suite. The kit's `http` engine drives any `/v1/systemone` server, so a full run needs no harness code:
+
+```bash
+git clone https://github.com/apolinario/decision-index && cd decision-index
+uv sync
+uv run python -m decision_index run --engine http \
+  --option base_url=http://127.0.0.1:8000 --option model=deciduous --out runs/deciduous-bonsai2-27b
+uv run python -m decision_index score --runs runs/deciduous-bonsai2-27b
+```
+
+The suite dataset and one rebuilt source (HLE) are gated: `hf auth login` first. Runs checkpoint and resume; upload with `--upload <org>/<dataset>` and open a PR adding one line to `submissions/README.md` in the kit repo per its README.
 
 ## Training from the pinned base
 
