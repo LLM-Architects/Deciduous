@@ -45,6 +45,7 @@ class Service:
     name: str = DEFAULT_MODEL
     checkpoint: str = "checkpoints/selected"
     release_date: str = ""
+    modalities: list[JSONValue] = field(default_factory=lambda: ["text", "image"])
     lock: LockType = field(default_factory=threading.Lock)
 
 
@@ -130,6 +131,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         service.model = await run_in_threadpool(MlxModel, mlx_pack)
         service.release_date = "2026-09-24"
         service.name = f"deciduous-{service.model.base_model.rsplit('/', 1)[-1].lower()}"
+        service.modalities = ["text"]
     elif llama_url:
         from deciduous.bonsai import BonsaiModel
         from deciduous.model import BASE_GGUF
@@ -179,7 +181,7 @@ def playground() -> str:
 def health() -> dict[str, JSONValue]:
     return {"status": "ready" if service.model is not None else "loading", "model": service.name,
             "checkpoint": service.checkpoint, "authentication": bool(os.getenv("DECIDUOUS_API_KEY")),
-            "modalities": ["text", "image"]}
+            "modalities": service.modalities}
 
 
 @app.get("/v1/models", dependencies=[Depends(authenticate)], response_model=None)

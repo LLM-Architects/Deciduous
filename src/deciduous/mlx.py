@@ -10,6 +10,7 @@ decision. Text only; route images through the GGUF runtime.
 from __future__ import annotations
 
 import itertools
+import json
 import os
 import string
 import sys
@@ -67,11 +68,18 @@ class MlxModel:
             raise MlxModelError(f"No bundled runtime under {runtime}; download the pinned MLX pack first.")
         if str(runtime) not in sys.path:
             sys.path.insert(0, str(runtime))
-        from artifact import load_model
-
         self.base_model = MLX_MODEL
         self.revision = MLX_REVISION
-        self.model, _config = load_model(self.pack)
+        pack_config = json.loads((self.pack / "config.json").read_text())
+        if pack_config.get("components", {}).get("vision"):
+            from vision_artifact import load_vl_model
+
+            vl_model, _processor, _config = load_vl_model(self.pack, load_processor=False)
+            self.model = vl_model.language_model
+        else:
+            from artifact import load_model
+
+            self.model, _config = load_model(self.pack)
         self.tokenizer = Tokenizer.from_file(str(self.pack / "tokenizer.json"))
         template = self.pack / "chat_template.jinja"
         if not template.is_file():
@@ -105,7 +113,7 @@ class MlxModel:
 
         ids = self.tokenizer.encode(prompt, add_special_tokens=False).ids
         tokens = mx.array([ids])
-        hidden = self.model.model(tokens)[:, -1:, :]
+        hidden = self.model.model(tokens, cache=self.model.make_cache())[:, -1:, :]
         logits = self.model.lm_head(hidden)[:, -1, :]
         probabilities = mx.softmax(logits[0])
         selected = probabilities[mx.array(self.token_ids)]

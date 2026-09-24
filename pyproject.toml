@@ -34,6 +34,8 @@ deciduous-report = "deciduous.report:main"
 [project.optional-dependencies]
 mlx = [
     "mlx==0.32.0",
+    "mlx-lm==0.31.3",
+    "mlx-vlm==0.6.3",
     "tokenizers>=0.21",
     "jinja2>=3.1",
 ]
@@ -59,5 +61,5 @@ untyped_calls_exclude = ["transformers", "datasets", "torch._tensor.Tensor.backw
 module = ["datasets.*"]
 ignore_missing_imports = true
 [[tool.mypy.overrides]]
-module = ["mlx.*", "tokenizers.*", "jinja2.*", "artifact"]
+module = ["mlx.*", "mlx_lm.*", "mlx_vlm.*", "tokenizers.*", "jinja2.*", "artifact", "vision_artifact"]
 ignore_missing_imports = true
