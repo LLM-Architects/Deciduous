@@ -40,7 +40,7 @@
       "base_checkpoint": 0,
       "legend": [
         "Qwen3.8-27B",
-        "AutoJev-27B",
+        "Deciduous-27B",
         "Jev"
       ],
       "evaluation_steps": [
@@ -63,7 +63,7 @@
       "base_checkpoint": 0,
       "legend": [
         "Qwen3.8-27B",
-        "AutoJev-27B",
+        "Deciduous-27B",
         "Jev"
       ],
       "evaluation_steps": [
@@ -83,7 +83,7 @@
       "base_checkpoint": 0,
       "legend": [
         "Qwen3.8-27B",
-        "AutoJev-27B",
+        "Deciduous-27B",
         "Jev"
       ],
       "evaluation_steps": [
@@ -105,7 +105,7 @@
       "base_checkpoint": 0,
       "legend": [
         "Qwen3.8-27B",
-        "AutoJev-27B",
+        "Deciduous-27B",
         "Jev"
       ],
       "evaluation_steps": [

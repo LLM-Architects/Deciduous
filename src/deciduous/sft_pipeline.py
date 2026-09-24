@@ -13,9 +13,9 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import TypedDict, cast
 
-from autojev.events import record
-from autojev.sft_synthetic import COUNTS, Slot, load_plan
-from autojev.types import Example, JSONValue
+from deciduous.events import record
+from deciduous.sft_synthetic import COUNTS, Slot, load_plan
+from deciduous.types import Example, JSONValue
 
 SEED = 20260921
 TRANCHES = 10
@@ -260,7 +260,7 @@ def make_schedule(plan_path: Path, original: Path, public_calibration: Path,
             "synthetic_calibration_path": relative(controls_audit.parent / "calibration.jsonl", output),
             "synthetic_confirmation_path": relative(controls_audit.parent / "confirmation.jsonl", output),
             "control_ids": controls, "audit_order": controls["calibration"] + controls["confirmation"] + [id_ for tranche in tranches for id_ in tranche["synthetic_ids"]],
-            "assignments": assignments, "code_sha256": {"src/autojev/sft_pipeline.py": digest(Path(__file__))}, "tranches": tranches}
+            "assignments": assignments, "code_sha256": {"src/deciduous/sft_pipeline.py": digest(Path(__file__))}, "tranches": tranches}
 
 
 def verify_output(report: dict[str, JSONValue], split: str, path: Path, expected: list[str]) -> list[Example]:
@@ -276,7 +276,7 @@ def freeze_tranche(schedule_path: Path, index: int, synthetic: Path, audit_path:
     schedule_hash = digest(schedule_path)
     if not 0 <= index < TRANCHES:
         raise ValueError(f"Tranche index must be 0..{TRANCHES - 1}")
-    if schedule["code_sha256"]["src/autojev/sft_pipeline.py"] != digest(Path(__file__)):
+    if schedule["code_sha256"]["src/deciduous/sft_pipeline.py"] != digest(Path(__file__)):
         raise ValueError("Packaging code changed after the schedule freeze")
     if digest(path_at(schedule_path, schedule["plan_path"])) != schedule["plan_sha256"]:
         raise ValueError("Generation plan changed after the schedule freeze")
@@ -503,8 +503,8 @@ def main() -> None:
     parser.add_argument("--synthetic", type=Path)
     parser.add_argument("--audit", type=Path)
     args = parser.parse_args()
-    if not os.getenv("AUTOJEV_EVENTS"):
-        parser.error("Set AUTOJEV_EVENTS explicitly to the continuation event log")
+    if not os.getenv("DECIDUOUS_EVENTS"):
+        parser.error("Set DECIDUOUS_EVENTS explicitly to the continuation event log")
     if args.command == "quick-plan":
         make_quick_plan(args.quick_plan, args.generation_plan)
         print(json.dumps({"path": str(args.quick_plan), "sha256": digest(args.quick_plan)}))

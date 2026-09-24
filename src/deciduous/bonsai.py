@@ -22,10 +22,10 @@ from typing import cast
 import httpx
 import torch
 
-from autojev.model import BASE_MODEL, BASE_REVISION, MAX_OPTIONS, decision_messages, open_image, options
-from autojev.types import DecisionInput, ImageInput
+from deciduous.model import BASE_MODEL, BASE_REVISION, MAX_OPTIONS, decision_messages, open_image, options
+from deciduous.types import DecisionInput, ImageInput
 
-SERVER_ENV = "AUTOJEV_LLAMA_URL"
+SERVER_ENV = "DECIDUOUS_LLAMA_URL"
 DEFAULT_SERVER = "http://127.0.0.1:8080"
 MASK = -1e9
 CODE_COUNT = MAX_OPTIONS

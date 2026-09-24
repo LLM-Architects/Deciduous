@@ -16,16 +16,16 @@ from typing import cast
 import torch
 import torch.nn.functional as F
 
-from autojev.evaluate import (
+from deciduous.evaluate import (
     Metrics, Prediction, calibration_ok, evaluate_logits, fit_temperature,
     hard_label, label_index, metrics, options, read_predictions, read_rows,
     selection_key, validate_coverage, write_json,
 )
-from autojev.events import record
-from autojev.model import BASE_MODEL, DecisionModel
-from autojev.optim import CPUOffloadAdamW
-from autojev.sft_pipeline import Receipt, ids_sha256, load_schedule, path_at
-from autojev.types import Example, JSONValue
+from deciduous.events import record
+from deciduous.model import BASE_MODEL, DecisionModel
+from deciduous.optim import CPUOffloadAdamW
+from deciduous.sft_pipeline import Receipt, ids_sha256, load_schedule, path_at
+from deciduous.types import Example, JSONValue
 
 
 class Arguments(argparse.Namespace):
@@ -410,8 +410,8 @@ def main() -> None:
         raise SystemExit(
             f"The pinned base {BASE_MODEL} is a ternary GGUF release: its rotated weights execute only "
             "under the PrismML llama.cpp runtime, so full-weight SFT cannot start from it and no torch-native "
-            "Bonsai 2 weights are published. Serve decisions from the GGUF with AUTOJEV_LLAMA_URL "
-            "(autojev-serve), or pass --base-model/--revision pointing at a torch-native repository."
+            "Bonsai 2 weights are published. Serve decisions from the GGUF with DECIDUOUS_LLAMA_URL "
+            "(deciduous-serve), or pass --base-model/--revision pointing at a torch-native repository."
         )
     if min(args.epochs, args.batch_size, args.effective_batch_size, args.token_budget, args.eval_every, args.public_eval_every, args.resume_every, args.quick_eval_every) < 1:
         raise ValueError("Batch, epoch and interval settings must be positive")
@@ -422,10 +422,10 @@ def main() -> None:
     quick_paths = (args.quick_development, args.quick_guard_data, args.quick_temperature)
     if any(quick_paths) and (not all(quick_paths) or not args.guard_data):
         raise ValueError("Quick evaluation needs all three frozen subsets and a full guard cohort/reference")
-    if args.initial_checkpoint and not os.environ.get("AUTOJEV_EVENTS"):
-        raise ValueError("Set AUTOJEV_EVENTS to the new stage's event log before continuing from a checkpoint")
-    if args.schedule and (args.epochs != 1 or not os.environ.get("AUTOJEV_EVENTS")):
-        raise ValueError("A streamed schedule requires one epoch and an explicit AUTOJEV_EVENTS path")
+    if args.initial_checkpoint and not os.environ.get("DECIDUOUS_EVENTS"):
+        raise ValueError("Set DECIDUOUS_EVENTS to the new stage's event log before continuing from a checkpoint")
+    if args.schedule and (args.epochs != 1 or not os.environ.get("DECIDUOUS_EVENTS")):
+        raise ValueError("A streamed schedule requires one epoch and an explicit DECIDUOUS_EVENTS path")
     run, output = Path(args.run), Path(args.output)
     if args.initial_checkpoint and any(path.resolve().is_relative_to(Path(args.initial_checkpoint).resolve()) for path in (run, output)):
         raise ValueError("New run/output directories must be outside the initial checkpoint artifact")
@@ -491,7 +491,7 @@ def main() -> None:
         code_hashes["sft_pipeline.py"] = digest(package / "sft_pipeline.py")
     code_hashes["uv.lock"] = digest(package.parents[1] / "uv.lock")
     config = {**vars(args), "data_sha256": hashes, "code_sha256": code_hashes, "git_commit": revision,
-              "initial_artifact": initial_artifact, "events_path": os.getenv("AUTOJEV_EVENTS", "progress/events.jsonl"),
+              "initial_artifact": initial_artifact, "events_path": os.getenv("DECIDUOUS_EVENTS", "progress/events.jsonl"),
               "train_rows": train_rows, "development_rows": len(development), "temperature_rows": len(temperature_rows),
               "guard_rows": len(guard_rows), "quick_development_rows": len(quick_development),
               "quick_guard_rows": len(quick_guard), "quick_temperature_rows": len(quick_temperature)}

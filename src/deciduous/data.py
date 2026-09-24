@@ -24,8 +24,8 @@ import zipfile
 import httpx
 from PIL import Image, ImageDraw
 
-from autojev.events import record
-from autojev.types import Content, Example, JSONValue, Label, Question, Target
+from deciduous.events import record
+from deciduous.types import Content, Example, JSONValue, Label, Question, Target
 
 NIMBLE_REVISION = "d2387fc0b32d1173bfc995395c076a25a2a107c9"
 SEED = 20260920
@@ -425,10 +425,10 @@ def token_lengths(rows: list[Example], cache: Path) -> None:
     """Measure the exact shared prompt with the processor, without model weights."""
     from transformers import AutoProcessor
     from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
-    from autojev.model import BASE_MODEL, BASE_REVISION, decision_messages, open_image
+    from deciduous.model import BASE_MODEL, BASE_REVISION, decision_messages, open_image
 
     if BASE_MODEL.endswith("-gguf"):
-        from autojev.bonsai import BonsaiModel
+        from deciduous.bonsai import BonsaiModel
 
         runtime = BonsaiModel()
         if runtime.codes[:26] != list(string.ascii_uppercase):

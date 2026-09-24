@@ -1,5 +1,5 @@
 [project]
-name = "autojev"
+name = "deciduous"
 version = "0.2.0"
 description = "One-pass decisions with full-weight supervised training"
 readme = "README.md"
@@ -25,11 +25,11 @@ dependencies = [
 ]
 
 [project.scripts]
-autojev-data = "autojev.data:main"
-autojev-train = "autojev.train:main"
-autojev-evaluate = "autojev.evaluate:main"
-autojev-serve = "autojev.server:main"
-autojev-report = "autojev.report:main"
+deciduous-data = "deciduous.data:main"
+deciduous-train = "deciduous.train:main"
+deciduous-evaluate = "deciduous.evaluate:main"
+deciduous-serve = "deciduous.server:main"
+deciduous-report = "deciduous.report:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -42,7 +42,7 @@ dev = [
 ]
 
 [tool.mypy]
-files = ["src/autojev"]
+files = ["src/deciduous"]
 python_version = "3.12"
 strict = true
 cache_dir = ".cache/mypy"

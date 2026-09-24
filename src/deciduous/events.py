@@ -17,7 +17,7 @@ def record(kind: str, **fields: object) -> dict[str, object]:
         "kind": kind,
         **fields,
     }
-    path = Path(os.getenv("AUTOJEV_EVENTS", "progress/events.jsonl"))
+    path = Path(os.getenv("DECIDUOUS_EVENTS", "progress/events.jsonl"))
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a") as stream:
         fcntl.flock(stream.fileno(), fcntl.LOCK_EX)

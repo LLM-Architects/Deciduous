@@ -19,7 +19,7 @@ from transformers.models.qwen3_5.configuration_qwen3_5 import Qwen3_5TextConfig
 from transformers.models.qwen3_5.modeling_qwen3_5 import Qwen3_5Model
 from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
-from autojev.types import Answer, Content, DecisionInput, ImageInput, JSONValue, Question
+from deciduous.types import Answer, Content, DecisionInput, ImageInput, JSONValue, Question
 
 BASE_MODEL = "prism-ml/Ternary-Bonsai-2-27B-gguf"
 BASE_REVISION = "8b7157531df3859ce2a415c60754e9152554e25d"
@@ -132,7 +132,7 @@ class DecisionModel(torch.nn.Module):
             raise ValueError(
                 f"The pinned base {BASE_MODEL} stores rotated ternary GGUF weights that only the PrismML "
                 "llama.cpp runtime can execute; it has no torch tensors to load or train. Serve decisions "
-                "from it with autojev.bonsai.BonsaiModel (AUTOJEV_LLAMA_URL), or pass an explicit "
+                "from it with deciduous.bonsai.BonsaiModel (DECIDUOUS_LLAMA_URL), or pass an explicit "
                 "torch-native base_model/revision pair."
             )
         self.base_model = saved["base_model"] if saved else base_model

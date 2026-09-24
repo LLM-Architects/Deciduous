@@ -16,7 +16,7 @@ import httpx
 import numpy as np
 from numpy.typing import NDArray
 
-from autojev.types import Example, JSONValue, Label, Question
+from deciduous.types import Example, JSONValue, Label, Question
 
 
 ECE_BINS = 15
@@ -468,7 +468,7 @@ def main() -> None:
         predictions = read_predictions(args.predictions)
     elif args.local:
         import torch
-        from autojev.model import DecisionModel
+        from deciduous.model import DecisionModel
 
         destination = args.output.with_suffix(".predictions.jsonl")
         if destination.exists():

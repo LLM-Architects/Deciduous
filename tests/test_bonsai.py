@@ -8,8 +8,8 @@ import httpx
 import pytest
 from PIL import Image
 
-from autojev.bonsai import BonsaiModel, data_uri
-from autojev.model import DecisionModel
+from deciduous.bonsai import BonsaiModel, data_uri
+from deciduous.model import DecisionModel
 
 CANDIDATES = list(string.ascii_uppercase) + ["".join(pair) for pair in itertools.product(string.ascii_uppercase, repeat=2)]
 TOKEN_IDS = {code: 1_000 + index for index, code in enumerate(CANDIDATES)}

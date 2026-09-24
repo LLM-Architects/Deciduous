@@ -18,9 +18,9 @@ from uuid import uuid4
 
 import httpx
 
-from autojev.events import record
-from autojev.synthetic import MODEL, Sol, sha, write
-from autojev.types import Example, JSONValue, Question
+from deciduous.events import record
+from deciduous.synthetic import MODEL, Sol, sha, write
+from deciduous.types import Example, JSONValue, Question
 
 SEED = 20260921
 COUNTS = {"nli": 18000, "intent": 10000, "numeric": 10000, "news": 8000, "evidence": 4000}
@@ -347,9 +347,9 @@ class UnresolvedFamilies(ValueError):
 
 class EventLog:
     def __init__(self) -> None:
-        configured = os.environ.get("AUTOJEV_EVENTS")
+        configured = os.environ.get("DECIDUOUS_EVENTS")
         if not configured:
-            raise ValueError("Set AUTOJEV_EVENTS explicitly for this experiment before generation")
+            raise ValueError("Set DECIDUOUS_EVENTS explicitly for this experiment before generation")
         path = Path(configured)
         self.seen = {str(json.loads(line).get("event_id")) for line in path.read_text().splitlines() if line.strip()} if path.exists() else set()
 
@@ -448,7 +448,7 @@ async def generate_batch(sol: Sol, batch: list[Slot], plan: Plan, name: str, gen
             if slot["family"] in rejected:
                 continue
             metadata = source(slot)
-            metadata.update({"dataset": "autojev-continuation-sol-v1", "generator": MODEL, "labeler": MODEL,
+            metadata.update({"dataset": "deciduous-continuation-sol-v1", "generator": MODEL, "labeler": MODEL,
                 "generation_model": generated["model"], "labeling_model": verified["model"],
                 "generation_response": generated["response_id"], "label_response": verified["response_id"],
                 "generation_explanation": candidate["explanation"], "label_explanation": judgment["explanation"],
@@ -600,7 +600,7 @@ async def run(plan: Plan, output: Path, cache: Path, usage: Path, *, split: str,
         raise ValueError("Existing private usage file must have mode0600")
     events = EventLog()
     numeric: list[Example] = []
-    from autojev.sft_numeric import numeric_example
+    from deciduous.sft_numeric import numeric_example
     for slot in slots:
         if slot["task"] == "numeric":
             adjusted = effective_slot(slot, generation_round)

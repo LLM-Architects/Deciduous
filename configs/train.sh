@@ -8,8 +8,8 @@ Usage: bash configs/train.sh TRAIN TEMPERATURE EVALUATION JEV_REFERENCE PROBABIL
 All input files are explicit JSONL paths. Relative paths are resolved from the
 repository root. RUN_DIR and CHECKPOINT_DIR must not exist. This starts one epoch
 from the pinned pretrained base with a fresh optimizer; it does not resume or
-initialize from a released AutoJev checkpoint. Input types are defined in
-src/autojev/types.py; recipe metadata is in configs/training.json.
+initialize from a released Deciduous checkpoint. Input types are defined in
+src/deciduous/types.py; recipe metadata is in configs/training.json.
 EOF
   exit 0
 fi
@@ -36,10 +36,10 @@ if [[ -e "$run_dir" || -e "$checkpoint_dir" ]]; then
   exit 2
 fi
 git rev-parse --is-inside-work-tree >/dev/null
-export AUTOJEV_EVENTS="$run_dir/events.jsonl"
+export DECIDUOUS_EVENTS="$run_dir/events.jsonl"
 export PYTHONUNBUFFERED=1
 
-exec env -u PYTHONPATH -u VIRTUAL_ENV uv run --locked autojev-train \
+exec env -u PYTHONPATH -u VIRTUAL_ENV uv run --locked deciduous-train \
   --train "$train_file" \
   --temperature "$temperature_file" \
   --development "$evaluation_file" \

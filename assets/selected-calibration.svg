@@ -54,14 +54,14 @@ z
     <g id="xtick_3">
      <g id="line2d_3"/>
      <g id="text_3">
-      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(264.395423 409.718633)">AutoJev-27B</text>
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(264.395423 409.718633)">Deciduous-27B</text>
       <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(285.768861 421.720586)">raw</text>
      </g>
     </g>
     <g id="xtick_4">
      <g id="line2d_4"/>
      <g id="text_4">
-      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(350.75336 409.718633)">AutoJev-27B</text>
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(350.75336 409.718633)">Deciduous-27B</text>
       <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(368.015079 421.721367)">fitted</text>
      </g>
     </g>
@@ -249,14 +249,14 @@ z
     <g id="xtick_8">
      <g id="line2d_24"/>
      <g id="text_22">
-      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(793.320514 409.718633)">AutoJev-27B</text>
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(793.320514 409.718633)">Deciduous-27B</text>
       <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(814.693952 421.720586)">raw</text>
      </g>
     </g>
     <g id="xtick_9">
      <g id="line2d_25"/>
      <g id="text_23">
-      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(879.678451 409.718633)">AutoJev-27B</text>
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(879.678451 409.718633)">Deciduous-27B</text>
       <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #52665b" transform="translate(896.94017 421.721367)">fitted</text>
      </g>
     </g>
@@ -416,7 +416,7 @@ z
    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52665b" x="26.64" y="86.688" transform="rotate(-0 26.64 86.688)">Hatched: raw T=1 · solid: fitted T · Jev: native probabilities</text>
   </g>
   <g id="text_41">
-   <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52665b" x="26.64" y="473.76" transform="rotate(-0 26.64 473.76)">AutoJev-27B: selected update 200 · temperatures fitted on 3,500 separate calibration examples</text>
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52665b" x="26.64" y="473.76" transform="rotate(-0 26.64 473.76)">Deciduous-27B: selected update 200 · temperatures fitted on 3,500 separate calibration examples</text>
   </g>
  </g>
  <defs>

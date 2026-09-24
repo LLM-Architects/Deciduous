@@ -13,7 +13,7 @@ from typing import TypedDict, cast
 
 import httpx
 
-from autojev.types import Example, JSONValue
+from deciduous.types import Example, JSONValue
 
 
 MODEL = "gpt-5.6-sol"
@@ -235,7 +235,7 @@ async def generate_batch(sol: Sol, batch: list[Slot], batch_index: int) -> list[
             accepted[slot["id"]] = {"id": slot["id"], "suite": f"synthetic-{task}", "family": slot["id"],
                 "state": candidate["state"], "question": {"type": "choice", "instructions": instructions, "criteria": dict(criteria)},
                 "label": candidate["label"], "target": candidate["label"], "source": {
-                    "dataset": "autojev-sol-transfer-v1", "synthetic": True, "task": task,
+                    "dataset": "deciduous-sol-transfer-v1", "synthetic": True, "task": task,
                     "distribution": slot["distribution"], "condition": slot["distribution"],
                     "language": slot["language"], "domain": slot["domain"],
                     "generator_model": generated["model"], "labeler_model": verified["model"],

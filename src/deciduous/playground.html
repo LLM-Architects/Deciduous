@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AutoJev · Playground</title>
+    <title>Deciduous · Playground</title>
     <style>
       :root {
         color-scheme: light;
@@ -393,7 +393,7 @@
   </head>
   <body>
     <header>
-      <div class="brand">AutoJev<span>Playground</span></div>
+      <div class="brand">Deciduous<span>Playground</span></div>
       <div id="status" class="status" role="status">Connecting</div>
     </header>
     <main>
@@ -515,7 +515,7 @@
 
       function requestBody() {
         return {
-          model: "autojev",
+          model: "deciduous",
           state: $("format").value === "json" ? JSON.parse($("state").value) : $("state").value,
           questions: JSON.parse($("questions").value),
           ...(images.length ? { images } : {}),

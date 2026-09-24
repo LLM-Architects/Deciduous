@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from fractions import Fraction
 import random
 
-from autojev.types import Content, Example, JSONValue
+from deciduous.types import Content, Example, JSONValue
 
 
 @dataclass(frozen=True)

@@ -26,16 +26,16 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue, field_validator
 from starlette.concurrency import run_in_threadpool
 from starlette.middleware.base import RequestResponseEndpoint
 
-from autojev.types import Answer, DecisionInput, DecisionResponse, JSONValue, Question as DecisionQuestion
+from deciduous.types import Answer, DecisionInput, DecisionResponse, JSONValue, Question as DecisionQuestion
 
 if TYPE_CHECKING:
-    from autojev.bonsai import BonsaiModel, RuntimeBatch
-    from autojev.model import DecisionModel
+    from deciduous.bonsai import BonsaiModel, RuntimeBatch
+    from deciduous.model import DecisionModel
 
 type Content = str | dict[str, JsonValue] | list[JsonValue]
 type DecisionRuntime = DecisionModel | BonsaiModel
-DEFAULT_MODEL = "autojev-ternary-bonsai-2-27b-gguf"
-ALIASES = {"autojev", "jev-latest", "jev-preview", "jev-1.13.0", "autojev-qwen3.8-27b", DEFAULT_MODEL}
+DEFAULT_MODEL = "deciduous-ternary-bonsai-2-27b-gguf"
+ALIASES = {"deciduous", "jev-latest", "jev-preview", "jev-1.13.0", "deciduous-qwen3.8-27b", DEFAULT_MODEL}
 
 
 @dataclass
@@ -111,36 +111,36 @@ class EvaluationRequest(BaseModel):
 
 
 def authenticate(authorization: str | None = Header(default=None)) -> None:
-    key = os.getenv("AUTOJEV_API_KEY")
+    key = os.getenv("DECIDUOUS_API_KEY")
     if key and not hmac.compare_digest((authorization or "").encode(), f"Bearer {key}".encode()):
         raise HTTPException(401, "Missing or invalid API key.", headers={"WWW-Authenticate": "Bearer"})
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    from autojev.model import DecisionModel
+    from deciduous.model import DecisionModel
 
-    llama_url = os.getenv("AUTOJEV_LLAMA_URL")
+    llama_url = os.getenv("DECIDUOUS_LLAMA_URL")
     if llama_url:
-        from autojev.bonsai import BonsaiModel
-        from autojev.model import BASE_GGUF
+        from deciduous.bonsai import BonsaiModel
+        from deciduous.model import BASE_GGUF
 
         service.checkpoint = BASE_GGUF
         service.model = await run_in_threadpool(BonsaiModel, llama_url)
         service.release_date = "2026-09-24"
     else:
-        service.checkpoint = os.getenv("AUTOJEV_CHECKPOINT", "checkpoints/selected")
+        service.checkpoint = os.getenv("DECIDUOUS_CHECKPOINT", "checkpoints/selected")
         service.model = await run_in_threadpool(DecisionModel, checkpoint=service.checkpoint)
         modified = (Path(service.checkpoint) / "decision_config.json").stat().st_mtime
         service.release_date = datetime.fromtimestamp(modified, timezone.utc).date().isoformat()
-    service.name = f"autojev-{service.model.base_model.rsplit('/', 1)[-1].lower()}"
+    service.name = f"deciduous-{service.model.base_model.rsplit('/', 1)[-1].lower()}"
     try:
         yield
     finally:
         service.model = None
 
 
-app = FastAPI(title="AutoJev", version="0.2.0", lifespan=lifespan)
+app = FastAPI(title="Deciduous", version="0.2.0", lifespan=lifespan)
 
 
 @app.middleware("http")
@@ -169,21 +169,21 @@ def playground() -> str:
 @app.get("/health", response_model=None)
 def health() -> dict[str, JSONValue]:
     return {"status": "ready" if service.model is not None else "loading", "model": service.name,
-            "checkpoint": service.checkpoint, "authentication": bool(os.getenv("AUTOJEV_API_KEY")),
+            "checkpoint": service.checkpoint, "authentication": bool(os.getenv("DECIDUOUS_API_KEY")),
             "modalities": ["text", "image"]}
 
 
 @app.get("/v1/models", dependencies=[Depends(authenticate)], response_model=None)
 def models() -> dict[str, JSONValue]:
     return {"models": [
-        {"name": name, "description": "Local AutoJev text and image decisions.", "release_date": service.release_date}
+        {"name": name, "description": "Local Deciduous text and image decisions.", "release_date": service.release_date}
         for name in sorted(ALIASES | {service.name})
     ]}
 
 
 def predict(model: DecisionRuntime, body: EvaluationRequest) -> DecisionResponse:
     import torch
-    from autojev.model import DecisionModel, answer
+    from deciduous.model import DecisionModel, answer
 
     questions = {key: cast(DecisionQuestion, question.model_dump(exclude_none=True))
                  for key, question in body.questions.items()}
@@ -222,7 +222,7 @@ async def system_one(body: EvaluationRequest) -> DecisionResponse:
 def main() -> None:
     import uvicorn
 
-    uvicorn.run("autojev.server:app", host=os.getenv("AUTOJEV_HOST", "127.0.0.1"), port=int(os.getenv("PORT", "8000")))
+    uvicorn.run("deciduous.server:app", host=os.getenv("DECIDUOUS_HOST", "127.0.0.1"), port=int(os.getenv("PORT", "8000")))
 
 
 if __name__ == "__main__":
